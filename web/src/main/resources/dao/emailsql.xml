@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.EmailDao">
+    <select id="getEmail" parameterType="beans.Email" resultType="beans.Email">
+        SELECT * FROM userinfo WHERE username = #{username}
+    </select>
+    <select id="getSpamEmail" resultType="beans.Email">
+        SELECT * FROM userinfo WHERE flag = 0
+    </select>
+    <insert id="addEmail" parameterType="beans.Email">
+        INSERT INTO `userinfo` (`username`, `subject`, `email_id`, `receive_address`) VALUES (#{username},#{subject},#{email_id},#{receive_address})
+    </insert>
+    <delete id="deleteEmailByUsername" parameterType="String">
+        DELETE  FROM  userinfo WHERE  username = #{username}
+    </delete>
+    <insert id="addflag" parameterType="beans.Email">
+        UPDATE `userinfo` SET `flag`=#{flag} WHERE (`username`=#{username} and `email_id`=#{email_id})
+    </insert>
+</mapper>

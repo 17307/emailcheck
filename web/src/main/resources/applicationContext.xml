@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--启动注解-->
+    <context:component-scan base-package="beans"/>
+    <context:component-scan base-package="service"/>
+    <!--配置mysql数据源-->
+    <bean id="jdbcDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName">
+            <value>com.mysql.jdbc.Driver</value>
+        </property>
+        <property name="url">
+            <value>jdbc:mysql:………………</value>
+            <!--springmybaitis是我的数据库  -->
+        </property>
+        <property name="username">
+            <value>username</value>
+        </property>
+        <property name="password">
+            <value>password</value>
+        </property>
+    </bean>
+    <!--事务-->
+    <bean id="transaction" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="jdbcDataSource"/>
+    </bean>
+    <!--开始事务-->
+    <tx:annotation-driven transaction-manager="transaction"/>
+    <!--mybatis-sqlSessionFactory-->
+
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactory">
+        <property name="dataSource" ref="jdbcDataSource"/>
+        <property name="configLocation" value="classpath:mybatis.xml"/>
+    </bean>
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean" id="emailDao">
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+        <property name="mapperInterface" value="dao.EmailDao"/>
+    </bean>
+</beans>
